@@ -7,8 +7,8 @@ import {
   softDeleteNotification,
   clearAllNotifications,
   createNotification,
-} from '../src/server/notificationService.js'
-import type { RecipientType } from '../src/models/Notification.js'
+} from '../notificationService.js'
+import type { RecipientType } from '../../models/Notification.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*')

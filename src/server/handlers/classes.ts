@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { connectToDatabase } from '../src/lib/db.js'
-import { Assignment } from '../src/models/Assignment.js'
+import { connectToDatabase } from '../../lib/db.js'
+import { ClassItem } from '../../models/ClassItem.js'
 
 function isAdmin(req: VercelRequest) {
   return req.headers['x-admin-key'] === process.env.ADMIN_PASSWORD
@@ -17,8 +17,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await connectToDatabase()
 
     if (req.method === 'GET') {
-      const assignments = await Assignment.find().sort({ createdAt: -1 }).lean()
-      return res.status(200).json({ success: true, assignments })
+      const classes = await ClassItem.find().sort({ createdAt: -1 }).lean()
+      return res.status(200).json({ success: true, classes })
     }
 
     if (!isAdmin(req)) {
@@ -26,33 +26,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (req.method === 'POST') {
-      const { title, course, deadline, submitted, total, status, priority } = req.body || {}
-      if (!title || !course || !deadline) {
-        return res.status(400).json({ success: false, error: 'title, course, deadline required' })
+      const { title, code, instructor, time, room, status, students } = req.body || {}
+      if (!title || !code || !instructor) {
+        return res.status(400).json({ success: false, error: 'title, code, instructor required' })
       }
-      const assignment = await Assignment.create({
+      const classItem = await ClassItem.create({
         title,
-        course,
-        deadline,
-        submitted: submitted ?? 0,
-        total: total ?? 50,
-        status: status || 'Active',
-        priority: priority || 'Medium',
+        code,
+        instructor,
+        time: time || 'TBD',
+        room: room || 'TBD',
+        status: status || 'Upcoming',
+        students: students ?? 0,
       })
-      return res.status(200).json({ success: true, assignment })
+      return res.status(200).json({ success: true, class: classItem })
     }
 
     if (req.method === 'PUT') {
       const { id, ...updates } = req.body || {}
       if (!id) return res.status(400).json({ success: false, error: 'id required' })
-      const assignment = await Assignment.findByIdAndUpdate(id, updates, { new: true }).lean()
-      return res.status(200).json({ success: true, assignment })
+      const classItem = await ClassItem.findByIdAndUpdate(id, updates, { new: true }).lean()
+      return res.status(200).json({ success: true, class: classItem })
     }
 
     if (req.method === 'DELETE') {
       const { id } = req.body || {}
       if (!id) return res.status(400).json({ success: false, error: 'id required' })
-      await Assignment.findByIdAndDelete(id)
+      await ClassItem.findByIdAndDelete(id)
       return res.status(200).json({ success: true })
     }
 

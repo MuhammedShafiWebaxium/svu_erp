@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { connectToDatabase } from '../src/lib/db.js'
-import { Internship } from '../src/models/Internship.js'
+import { connectToDatabase } from '../../lib/db.js'
+import { Internship } from '../../models/Internship.js'
 
 function isAdmin(req: VercelRequest) {
   return req.headers['x-admin-key'] === process.env.ADMIN_PASSWORD

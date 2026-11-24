@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { connectToDatabase } from '../src/lib/db.js'
-import { Student } from '../src/models/Student.js'
-import { SupportThread } from '../src/models/SupportThread.js'
-import { Assignment } from '../src/models/Assignment.js'
+import { connectToDatabase } from '../../lib/db.js'
+import { Student } from '../../models/Student.js'
+import { SupportThread } from '../../models/SupportThread.js'
+import { Assignment } from '../../models/Assignment.js'
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const PIE_COLORS = ['#ed143d', '#f43f5e', '#fb7185', '#fda4af', '#fecdd3', '#ffe4e6']

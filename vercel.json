@@ -1,18 +1,60 @@
 {
   "rewrites": [
-    { "source": "/api/students/import", "destination": "/api/import.ts" },
-    { "source": "/api/auth/student-login", "destination": "/api/login.ts" },
-    { "source": "/api/auth/admin-login", "destination": "/api/admin-login.ts" },
-    { "source": "/api/students", "destination": "/api/students.ts" },
-    { "source": "/api/announcements", "destination": "/api/announcements.ts" },
-    { "source": "/api/assignments", "destination": "/api/assignments.ts" },
-    { "source": "/api/classes", "destination": "/api/classes.ts" },
-    { "source": "/api/internships", "destination": "/api/internships.ts" },
-    { "source": "/api/projects", "destination": "/api/projects.ts" },
-    { "source": "/api/dashboard-stats", "destination": "/api/dashboard-stats.ts" },
-    { "source": "/api/support", "destination": "/api/support.ts" },
-    { "source": "/api/notifications", "destination": "/api/notifications.ts" },
-    { "source": "/api/kampus-launch", "destination": "/api/kampus-launch.ts" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/api/students/import",
+      "destination": "/api/index?__handler=import"
+    },
+    {
+      "source": "/api/auth/student-login",
+      "destination": "/api/index?__handler=login"
+    },
+    {
+      "source": "/api/auth/admin-login",
+      "destination": "/api/index?__handler=admin-login"
+    },
+    {
+      "source": "/api/students",
+      "destination": "/api/index?__handler=students"
+    },
+    {
+      "source": "/api/announcements",
+      "destination": "/api/index?__handler=announcements"
+    },
+    {
+      "source": "/api/assignments",
+      "destination": "/api/index?__handler=assignments"
+    },
+    {
+      "source": "/api/classes",
+      "destination": "/api/index?__handler=classes"
+    },
+    {
+      "source": "/api/internships",
+      "destination": "/api/index?__handler=internships"
+    },
+    {
+      "source": "/api/projects",
+      "destination": "/api/index?__handler=projects"
+    },
+    {
+      "source": "/api/dashboard-stats",
+      "destination": "/api/index?__handler=dashboard-stats"
+    },
+    {
+      "source": "/api/support",
+      "destination": "/api/index?__handler=support"
+    },
+    {
+      "source": "/api/notifications",
+      "destination": "/api/index?__handler=notifications"
+    },
+    {
+      "source": "/api/kampus-launch",
+      "destination": "/api/index?__handler=kampus-launch"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }

@@ -7,7 +7,7 @@ import {
   updateThreadStatus,
   reopenThread,
   getAllThreads,
-} from '../src/server/supportService.js'
+} from '../supportService.js'
 
 function isAdmin(req: VercelRequest) {
   const key = req.headers['x-admin-key']

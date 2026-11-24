@@ -4,7 +4,7 @@ import {
   getAllAnnouncements,
   getActiveAnnouncementsForStudent,
   deleteAnnouncement,
-} from '../src/server/announcementService.js'
+} from '../announcementService.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*')

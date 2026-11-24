@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { connectToDatabase } from '../src/lib/db.js'
-import { ClassItem } from '../src/models/ClassItem.js'
+import { connectToDatabase } from '../../lib/db.js'
+import { Project } from '../../models/Project.js'
 
 function isAdmin(req: VercelRequest) {
   return req.headers['x-admin-key'] === process.env.ADMIN_PASSWORD
@@ -17,8 +17,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await connectToDatabase()
 
     if (req.method === 'GET') {
-      const classes = await ClassItem.find().sort({ createdAt: -1 }).lean()
-      return res.status(200).json({ success: true, classes })
+      const projects = await Project.find().sort({ createdAt: -1 }).lean()
+      return res.status(200).json({ success: true, projects })
     }
 
     if (!isAdmin(req)) {
@@ -26,33 +26,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (req.method === 'POST') {
-      const { title, code, instructor, time, room, status, students } = req.body || {}
-      if (!title || !code || !instructor) {
-        return res.status(400).json({ success: false, error: 'title, code, instructor required' })
+      const { title, lead, tech, progress, status, category } = req.body || {}
+      if (!title || !lead) {
+        return res.status(400).json({ success: false, error: 'title and lead required' })
       }
-      const classItem = await ClassItem.create({
+      const project = await Project.create({
         title,
-        code,
-        instructor,
-        time: time || 'TBD',
-        room: room || 'TBD',
-        status: status || 'Upcoming',
-        students: students ?? 0,
+        lead,
+        tech: Array.isArray(tech) ? tech : [],
+        progress: progress ?? 0,
+        status: status || 'Development',
+        category: category || 'General',
       })
-      return res.status(200).json({ success: true, class: classItem })
+      return res.status(200).json({ success: true, project })
     }
 
     if (req.method === 'PUT') {
       const { id, ...updates } = req.body || {}
       if (!id) return res.status(400).json({ success: false, error: 'id required' })
-      const classItem = await ClassItem.findByIdAndUpdate(id, updates, { new: true }).lean()
-      return res.status(200).json({ success: true, class: classItem })
+      const project = await Project.findByIdAndUpdate(id, updates, { new: true }).lean()
+      return res.status(200).json({ success: true, project })
     }
 
     if (req.method === 'DELETE') {
       const { id } = req.body || {}
       if (!id) return res.status(400).json({ success: false, error: 'id required' })
-      await ClassItem.findByIdAndDelete(id)
+      await Project.findByIdAndDelete(id)
       return res.status(200).json({ success: true })
     }
 
