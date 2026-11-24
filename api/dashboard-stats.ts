@@ -44,7 +44,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               as: 'courseInfo',
             },
           },
-          { $unwind: { path: '$courseInfo', preserveNullAndEmpty: true } },
+          { $unwind: { path: '$courseInfo', preserveNullAndEmptyArrays: true } },
           {
             $group: {
               _id: {
