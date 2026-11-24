@@ -1,0 +1,80 @@
+import { motion } from 'framer-motion'
+import {
+  BarChart3, Briefcase, ClipboardList, FileJson, Folder, GraduationCap,
+  LifeBuoy, LogOut, Users, X,
+} from 'lucide-react'
+
+export type AdminSection = 'dashboard' | 'students' | 'import' | 'tickets' | 'assignments' | 'projects' | 'internship' | 'announcements'
+
+type NavItem = { id: AdminSection; label: string; icon: React.FC<{ className?: string }> }
+
+type AdminSidebarProps = {
+  activeItem: AdminSection
+  mobileOpen: boolean
+  onNavigate: (item: AdminSection) => void
+  onClose: () => void
+  onSignOut: () => void
+  badges?: Partial<Record<AdminSection, string | number | null>>
+}
+
+const groups: { label: string; items: NavItem[] }[] = [
+  { label: 'Overview', items: [
+    { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
+  ] },
+  { label: 'Academics', items: [
+    { id: 'students', label: 'Students',          icon: Users    },
+    { id: 'import',   label: 'Import Evaluation', icon: FileJson },
+  ] },
+  { label: 'Support', items: [
+    { id: 'tickets',     label: 'Support Tickets',   icon: LifeBuoy    },
+    { id: 'assignments', label: 'Assignment Chats',  icon: ClipboardList },
+    { id: 'projects',    label: 'Project Chats',     icon: Folder      },
+    { id: 'internship',  label: 'Internship Chats',  icon: Briefcase   },
+    // { id: 'announcements', label: 'Announcements',  icon: Bell        },
+  ] },
+]
+
+export default function AdminSidebar({ activeItem, mobileOpen, onNavigate, onClose, onSignOut, badges = {} }: AdminSidebarProps) {
+  return (
+    <>
+      {mobileOpen && <button type="button" aria-label="Close navigation" className="fixed inset-0 z-30 bg-slate-950/70 backdrop-blur-sm lg:hidden" onClick={onClose} />}
+      <aside className={`fixed inset-y-0 left-0 z-40 flex w-65 flex-col justify-between overflow-y-auto border-r border-slate-800 bg-slate-900/95 backdrop-blur-2xl transition-transform duration-300 ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        <div>
+          <div className="flex items-center gap-3 border-b border-slate-800/80 p-6">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-tr from-[#ed143d] to-rose-500 shadow-lg shadow-[#ed143d]/30"><GraduationCap className="h-6 w-6 text-white" /></div>
+            <div><h1 className="flex items-center text-[14px] font-extrabold tracking-wide text-white">SVU <span className="ml-1 rounded border border-[#ed143d]/30 bg-[#ed143d]/20 px-1.5 py-0.5 font-mono text-[10px] text-[#ed143d]">Campus OS</span></h1><p className="text-[11px] font-medium text-slate-400">Swami Vivekanand University</p></div>
+            <button type="button" aria-label="Close navigation" onClick={onClose} className="ml-auto text-slate-400 lg:hidden"><X className="h-5 w-5" /></button>
+          </div>
+          <nav className="space-y-5 p-4">
+            {groups.map(group => (
+              <div key={group.label}>
+                <p className="mb-2 px-4 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">{group.label}</p>
+                <div className="space-y-1">
+                  {group.items.map(item => {
+                    const active = activeItem === item.id
+                    const Icon = item.icon
+                    const badge = badges[item.id]
+                    return (
+                      <button key={item.id} type="button" onClick={() => onNavigate(item.id)} className={`sidebar-nav-item group relative flex w-full items-center justify-between rounded-xl px-4 py-2.5 font-medium transition-all duration-200 ${active ? 'sidebar-nav-active font-semibold text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'}`}>
+                        {active && <motion.div layoutId="admin-sidebar-active" className="absolute inset-0 rounded-xl bg-linear-to-r from-[#ed143d] to-rose-600 shadow-lg shadow-[#ed143d]/30" transition={{ type: 'spring', stiffness: 400, damping: 30 }} />}
+                        <div className="relative z-10 flex min-w-0 flex-1 items-center gap-3">
+                          <Icon className={`h-4.5 w-4.5 shrink-0 ${active ? 'text-white' : 'text-slate-400 group-hover:text-white'}`} />
+                          <span className={`sidebar-nav-label truncate ${active ? 'text-white' : ''}`}>{item.label}</span>
+                        </div>
+                        {badge != null && <span className={`relative z-10 ml-2 shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${active ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-300 group-hover:bg-slate-700'}`}>{badge}</span>}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </nav>
+        </div>
+        <div className="m-3 flex items-center justify-between rounded-2xl border-t border-slate-800/80 bg-slate-950/50 p-4">
+          <div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-rose-500 to-[#ed143d] text-white"><GraduationCap className="h-5 w-5" /></div><div><p className="text-xs font-semibold text-white">SVU Admin</p><p className="text-xs text-slate-400">Staff Portal</p></div></div>
+          <button type="button" onClick={onSignOut} aria-label="Log out" title="Log out" className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-[#ed143d]/10 hover:text-[#ed143d]"><LogOut className="h-4 w-4" /></button>
+        </div>
+      </aside>
+    </>
+  )
+}
